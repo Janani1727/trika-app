@@ -1,0 +1,32 @@
+table{
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 90%;
+    margin: auto;
+    
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border: 1px solid black;
+  }
+
+  th{
+    background-color:rgb(39, 39, 39);
+    color: white;
+}
+
+  
+input{
+     
+   
+    width: 88%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin:  20px auto 20px;
+   
+}
+
