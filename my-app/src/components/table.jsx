@@ -1,101 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import "./table.css";
-
-// const Table = () => {
-//   const [data, setData] = useState([]);
-//   const [searchData, setSearchData] = useState("");
-//   const [filteredData, setFilteredData] = useState([]);
-//   const [checked, setChecked] = useState([]);
-
-//   async function Products() {
-//     try {
-//       let res = await axios.get("https://dummyjson.com/products");
-//       // console.log(res.data.products);
-//       setData(res.data.products);
-//       setFilteredData(res.data.products);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-
-//   useEffect(() => {
-//     Products();
-//   }, []);
-
-//   function search(e) {
-//     setSearchData(e);
-//     // console.log(e);
-//   }
-
-//   function filterData(searchData) {
-//     if (searchData === "") {
-//       setFilteredData(data);
-//     } else {
-//       setTimeout(() => {
-//         const filtered = data.filter((prod) =>
-//           prod.title.toLowerCase().includes(searchData.toLowerCase())
-//         );
-//         setFilteredData(filtered);
-//       }, 2000);
-//     }
-//   }
-
-//   useEffect(() => {
-//     filterData(searchData);
-//   }, [searchData, data]);
-
-//   function check() {
-//     checked.push(data);
-//   }
-
-//   function deleteAll(){
-//      console.log("del")
-//   }
-  
-
-//   return (
-//     <div>
-//       <button onClick={deleteAll}>delete</button>
-//       <input
-//         onChange={(e) => search(e.target.value)}
-//         value={searchData}
-//         type="text"
-//         placeholder="search products..."
-//       />
-//       <table>
-//         <tr>
-//           <th>
-//             <input onClick={() => check()} type="checkbox" name="" id="" />
-//           </th>
-//           <th>Title</th>
-//           <th>Description</th>
-//           <th>Price</th>
-//           <th>Brand</th>
-//         </tr>
-
-//         {filteredData.map((item) => {
-//           return (
-//             <tr key={item.id}>
-//               <td>
-//                 <input type="checkbox" name="" id="" />
-//               </td>
-//               <td>{item.title}</td>
-//               <td>{item.description}</td>
-//               <td>₹ {item.price}</td>
-//               <td>{item.brand}</td>
-//             </tr>
-//           );
-//         })}
-//       </table>
-//     </div>
-//   );
-// };
-
-// export default Table;
-
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./table.css";
@@ -104,7 +6,9 @@ const Table = () => {
   const [data, setData] = useState([]);
   const [searchData, setSearchData] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const [checkedItems, setCheckedItems] = useState([]); 
+  const [checkedItems, setCheckedItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 5;
 
   async function Products() {
     try {
@@ -137,28 +41,51 @@ const Table = () => {
 
   useEffect(() => {
     filterData(searchData);
+    setCurrentPage(1); 
   }, [searchData, data]);
 
   function handleCheck(id) {
     setCheckedItems((prev) => {
-      if (prev.includes(id)) {      
+      if (prev.includes(id)) {
         return prev.filter((itemId) => itemId !== id);
       } else {
-           return [...prev, id];
+        return [...prev, id];
       }
     });
   }
 
   function deleteAll() {
-   
-    const remainingItems = filteredData.filter(item => !checkedItems.includes(item.id));
+    const remainingItems = filteredData.filter(
+      (item) => !checkedItems.includes(item.id)
+    );
     setFilteredData(remainingItems);
-    setCheckedItems([]);
+    setCheckedItems([]); 
   }
+
+  const totalItems = filteredData.length;
+  const totalPages = Math.ceil(totalItems / limit);
+  const indexOfLastItem = currentPage * limit;
+  const indexOfFirstItem = indexOfLastItem - limit;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const nextTwoPages = () => {
+    if (currentPage + 2 <= totalPages) setCurrentPage(currentPage + 2);
+  };
+
+  const prevTwoPages = () => {
+    if (currentPage - 2 >= 1) setCurrentPage(currentPage - 2);
+  };
 
   return (
     <div>
-      <button onClick={deleteAll}>Delete Selected</button>
       <input
         onChange={(e) => search(e.target.value)}
         value={searchData}
@@ -169,13 +96,15 @@ const Table = () => {
         <thead>
           <tr>
             <th>
-              <input 
-                type="checkbox" 
+              <input
+                type="checkbox"
                 onChange={(e) => {
                   const isChecked = e.target.checked;
-                  const allChecked = isChecked ? filteredData.map(item => item.id) : [];
+                  const allChecked = isChecked
+                    ? filteredData.map((item) => item.id)
+                    : [];
                   setCheckedItems(allChecked);
-                }} 
+                }}
               />
             </th>
             <th>Title</th>
@@ -185,13 +114,20 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((item) => (
-            <tr key={item.id}>
+          {currentItems.map((item) => (
+            <tr
+              key={item.id}
+              style={{
+                backgroundColor: checkedItems.includes(item.id)
+                  ? "lightgray"
+                  : "white",
+              }}
+            >
               <td>
                 <input
                   type="checkbox"
-                  checked={checkedItems.includes(item.id)} 
-                  onChange={() => handleCheck(item.id)} 
+                  checked={checkedItems.includes(item.id)}
+                  onChange={() => handleCheck(item.id)}
                 />
               </td>
               <td>{item.title}</td>
@@ -202,6 +138,34 @@ const Table = () => {
           ))}
         </tbody>
       </table>
+      <div className="flex">
+        <div>
+          <button className="select" onClick={deleteAll}>
+            Delete Selected
+          </button>
+        </div>
+
+        <div className="pagination">
+          <button onClick={prevTwoPages} disabled={currentPage <= 2}>
+            ««
+          </button>
+          <button onClick={prevPage} disabled={currentPage === 1}>
+            «
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button onClick={nextPage} disabled={currentPage === totalPages}>
+            »
+          </button>
+          <button
+            onClick={nextTwoPages}
+            disabled={currentPage >= totalPages - 1}
+          >
+            »»
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
