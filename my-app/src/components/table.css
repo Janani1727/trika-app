@@ -25,7 +25,7 @@ input{
     font-size: 16px;
     border: 1px solid black;
     border-radius: 5px;
-    margin:  20px auto 20px;
+    margin:  10px auto 20px;
    
 }
 
@@ -34,6 +34,7 @@ input{
     display: flex;
     justify-content: center;
     gap: 10px;
+    margin-left: 27%;
   }
   
   .pagination button {
@@ -50,4 +51,20 @@ input{
     cursor: not-allowed;
   }
 
+  .flex{
+    display: flex;
+    margin-left: 5%;
+  }
+
+  .select{
+    margin-top: 25px;
+    width: 150px;
+    height: 35px;
+    background-color: #007bff;
+    border: 2px solid #007bff;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+
+  }
  

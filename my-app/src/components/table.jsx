@@ -41,7 +41,7 @@ const Table = () => {
 
   useEffect(() => {
     filterData(searchData);
-    setCurrentPage(1); 
+    setCurrentPage(1);  
   }, [searchData, data]);
 
   function handleCheck(id) {
@@ -86,6 +86,7 @@ const Table = () => {
 
   return (
     <div>
+    <h2>Trika Technologies</h2>
       <input
         onChange={(e) => search(e.target.value)}
         value={searchData}
