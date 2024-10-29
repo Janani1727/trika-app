@@ -4,7 +4,7 @@ This application was created as part of a coding challenge for a Developer/Sr De
 It includes features such as product search, delete, pagination, and row selection.
 
 ### 🚀 Deployment Links
-- **Frontend**: [Vercel](https://trika-tech-gbluqbywh-janani1727s-projects.vercel.app/)
+- **Frontend**: [Vercel](https://trika-tech-1782hy3i2-janani1727s-projects.vercel.app))
 - **Backend**: [Render](https://trika-app.onrender.com/products)
 
 ---
