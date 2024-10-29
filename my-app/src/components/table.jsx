@@ -12,9 +12,10 @@ const Table = () => {
 
   async function Products() {
     try {
-      let res = await axios.get("https://dummyjson.com/products");
-      setData(res.data.products);
-      setFilteredData(res.data.products);
+      let res = await axios.get("https://trika-app.onrender.com/products");
+      console.log(res.data)
+      setData(res.data);
+      setFilteredData(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -56,7 +57,7 @@ const Table = () => {
 
   function deleteAll() {
     const remainingItems = filteredData.filter(
-      (item) => !checkedItems.includes(item.id)
+      (item) => !checkedItems.includes(item._id)
     );
     setFilteredData(remainingItems);
     setCheckedItems([]); 
@@ -102,7 +103,7 @@ const Table = () => {
                 onChange={(e) => {
                   const isChecked = e.target.checked;
                   const allChecked = isChecked
-                    ? filteredData.map((item) => item.id)
+                    ? filteredData.map((item) => item._id)
                     : [];
                   setCheckedItems(allChecked);
                 }}
@@ -117,9 +118,9 @@ const Table = () => {
         <tbody>
           {currentItems.map((item) => (
             <tr
-              key={item.id}
+              key={item._id}
               style={{
-                backgroundColor: checkedItems.includes(item.id)
+                backgroundColor: checkedItems.includes(item._id)
                   ? "lightgray"
                   : "white",
               }}
@@ -127,8 +128,8 @@ const Table = () => {
               <td>
                 <input
                   type="checkbox"
-                  checked={checkedItems.includes(item.id)}
-                  onChange={() => handleCheck(item.id)}
+                  checked={checkedItems.includes(item._id)}
+                  onChange={() => handleCheck(item._id)}
                 />
               </td>
               <td>{item.title}</td>
